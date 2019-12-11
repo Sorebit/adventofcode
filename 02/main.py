@@ -82,21 +82,21 @@ def main():
     test()
 
     # Open input intcodes and solve
-    raw = open("input.txt", "r").readline().split(",")
-    intcode = [int(instruction) for instruction in raw]
+    with open("input.txt", "r") as file:
+        intcode = [int(ins) for ins in file.readline().split(",")]
 
-    # Solve part 1
-    one = Program(intcode, 12, 2)
-    print("Part 1: %d\n" % one.process())
+        # Solve part 1
+        one = Program(intcode, 12, 2)
+        print("Part 1: %d\n" % one.process())
 
-    # Solve part 2
-    print("Part 2:")
-    for noun in range(0, 100):
-        for verb in range(0, 100):
-            program = Program(intcode, noun, verb)
-            if program.process() == 19690720:
-                print("Found: %d %d => %d" % (noun, verb, program.mem[0]))
-                print("Result: %d" % (100 * noun + verb))
+        # Solve part 2
+        print("Part 2:")
+        for noun in range(0, 100):
+            for verb in range(0, 100):
+                program = Program(intcode, noun, verb)
+                if program.process() == 19690720:
+                    print("Found: %d %d => %d" % (noun, verb, program.mem[0]))
+                    print("Result: %d" % (100 * noun + verb))
 
 
 if __name__ == '__main__':
