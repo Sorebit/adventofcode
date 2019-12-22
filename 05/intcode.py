@@ -64,26 +64,25 @@ class Instruction(object):
         # Create params array for later use
         self.params = [None for i in range(0, self.params_num)]
 
-        # print("Instruction: raw: %s" % self.raw)
-        # print("\topcode: %d, params_num: %d" % (self.opcode, self.params_num))
-
         # If params modes specified
         if len(self.raw) > 2:
             params_raw = str(int(instruction / 100))
-            # print("\traw longer than 2, cool")
-            # print("\t\tparams_raw:", params_raw)
-            # print("\t\tparams_num:", self.params_num)
+
             for i in range(0, len(params_raw)):
                 self.params_modes[i] = int(params_raw[len(params_raw) - i - 1])
 
-        # TODO: CONSIDER MODES IN OTHER OPS
-        # Last parameter (output) in OP_ADD and OP_MULL is always in immediate mode
-        # Even though the site says: "Parameters that an instruction writes to will never be in immediate mode."?
-        # Oh, okay, seems like my code kinda works around this.
-        if self.opcode in [OP_ADD, OP_MUL, OP_EQ, OP_LT]:
-            self.params_modes[2] = MODE_IMM
 
-        # print("\tmodes:", self.params_modes)
+        # Assignment fix
+        # E.g.
+        # pvalue = ins.param[0] + ins.param[1]
+        # mem[ins.param[2]] = pvalue
+        #
+        # If we actually treat param[2] in address mode, self.apply_modes is
+        # going to break this assignment
+        #
+        # Fix instructions whose last param is an assignment address
+        if self.opcode in [OP_ADD, OP_MUL, OP_EQ, OP_LT, OP_IN]:
+            self.params_modes[self.params_num - 1] = MODE_IMM
 
 
     # Apply modes to params
@@ -98,26 +97,20 @@ class Instruction(object):
             else:
                 # Immediate mode
                 self.params[i] = params[i]
-            # print("\t[@ %d, m %d]\t= %d" % (params[i], self.params_modes[i], self.params[i]))
-
-        # print("\tself.params:", self.params)
 
 
-
-# TODO: Shouldn't opcodes 3 and 4 process param modes as well?
-# TODO: Put IO in program do or some other helper to keep main loop clean
 class Program(object):
     def __init__(self, intcode):
         # Copy program, then substitute noun and verb
         self.mem = intcode.copy()
         self.mem_size = len(self.mem)
         self.ins_ptr = 0
+        self.finished = False
 
 
-    def process(self):
+    def process(self, verbose = True):
         self.ins_ptr = 0
         while True:
-            # print("\n[ptr %d]" % self.ins_ptr)
             # Process opcode
             ins = Instruction(self.mem[self.ins_ptr])
             ins.apply_modes(self)
@@ -133,7 +126,7 @@ class Program(object):
             elif ins.opcode in [OP_JNZ, OP_JZR]:
                 self._logic_jmp(ins)
             elif ins.opcode == OP_END:
-                # End
+                self.finished = True
                 break
             else:
                 print("Exception: Unknown instruction %s at address %d" % (ins.raw, self.ins_ptr))
@@ -144,31 +137,30 @@ class Program(object):
                 self.ins_ptr += ins.params_num + 1
 
             if self.ins_ptr >= self.mem_size:
-                print("Exception: Reached end of program without ins 99")
+                print("Exception: Reached end of program without OP_END")
                 break
-        # Return first memory cell
-        return self.mem[0]
+
+        if verbose:
+            print("Done.")
+        print()
 
 
     def _math(self, ins, op):
-        # print("_math: params:", params)
         self.mem[ins.params[2]] = op(ins.params[0], ins.params[1])
 
 
     def _io(self, ins):
-        print("IO")
-        addr = self.mem[self.ins_ptr + 1]
-        print("addr:", addr)
+        param = ins.params[0]
+
         if ins.opcode == OP_IN:
             # Assume okay input
-            inp = input("IN(%d): " % addr)
-            self.mem[addr] = int(inp)
+            inp = int(input("IN: "))
+            self.mem[param] = inp
         else:
-            print("[%d] OUT(%d) >> %d" % (self.ins_ptr, addr, self.mem[addr]))
+            print("OUT >> %d" % param)
 
 
     def _logic_jmp(self, ins):
-        print("ins.params:", ins.params)
         if ins.opcode == OP_JNZ and ins.params[0] != 0:
             self.ins_ptr = ins.params[1]
         elif ins.opcode == OP_JZR and ins.params[0] == 0:
@@ -178,7 +170,6 @@ class Program(object):
 
 
     def _logic_cmp(self, ins):
-        # print("ins.params", ins.params)
         if ins.opcode == OP_EQ:
             self.mem[ins.params[2]] = int(ins.params[0] == ins.params[1])
         elif ins.opcode == OP_LT:
