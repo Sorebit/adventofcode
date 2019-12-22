@@ -43,7 +43,7 @@ MODE_POS = 0 # Position
 MODE_IMM = 1 # Immediate
 
 class Instruction(object):
-    def __init__(self, instruction):
+    def __init__(self, instruction, program):
         # Store raw instruction and opcode
         self.raw = str(instruction)
         self.opcode = int(self.raw[-2:])
@@ -84,9 +84,11 @@ class Instruction(object):
         if self.opcode in [OP_ADD, OP_MUL, OP_EQ, OP_LT, OP_IN]:
             self.params_modes[self.params_num - 1] = MODE_IMM
 
+        self._apply_modes(program)
+
 
     # Apply modes to params
-    def apply_modes(self, program):
+    def _apply_modes(self, program):
         params_start = program.ins_ptr + 1
         params = program.mem[params_start : params_start + self.params_num]
 
@@ -101,7 +103,6 @@ class Instruction(object):
 
 class Program(object):
     def __init__(self, intcode):
-        # Copy program, then substitute noun and verb
         self.mem = intcode.copy()
         self.mem_size = len(self.mem)
         self.ins_ptr = 0
@@ -112,8 +113,7 @@ class Program(object):
         self.ins_ptr = 0
         while True:
             # Process opcode
-            ins = Instruction(self.mem[self.ins_ptr])
-            ins.apply_modes(self)
+            ins = Instruction(self.mem[self.ins_ptr], self)
 
             if ins.opcode == OP_ADD:
                 self._math(ins, lambda x, y: x + y)
@@ -150,14 +150,12 @@ class Program(object):
 
 
     def _io(self, ins):
-        param = ins.params[0]
-
         if ins.opcode == OP_IN:
             # Assume okay input
             inp = int(input("IN: "))
-            self.mem[param] = inp
+            self.mem[ins.params[0]] = inp
         else:
-            print("OUT >> %d" % param)
+            print("OUT >> %d" % ins.params[0])
 
 
     def _logic_jmp(self, ins):

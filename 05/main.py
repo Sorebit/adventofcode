@@ -47,6 +47,7 @@ def test():
   
 
 def main():
+    # Test if it all ain't broke
     test()
 
     raw_intcode = None
