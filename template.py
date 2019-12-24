@@ -4,6 +4,12 @@ def solve(data):
     return None, None
 
 
+def check(value, expected):
+    if value == expected:
+        return "OK %s" % str(value)
+    return "Expected %s, got %s" % (str(expected), str(value))
+
+
 def test(path, expected_path = None):
     data = None
     print("File:", path)
@@ -28,7 +34,7 @@ def test(path, expected_path = None):
 
 def main():
     test("input.txt")
-    # test("tests/1.txt", "tests/1_out.txt")
+    # test("tests/1.in", "tests/1.out")
 
 
 if __name__ == '__main__':
