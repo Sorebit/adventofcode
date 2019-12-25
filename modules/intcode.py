@@ -3,7 +3,7 @@
 # 1 - immediate mode (parameter is value)
 #
 # Opcodes:
-# 1 - add: Read three next cells (x, y, z) read memory at adresses x and y, 
+# 1 - add: Read three next cells (x, y, z) read memory at adresses x and y,
 #     add them and store at address z, then move instruction pointer
 # 2 - multiply: like 1, but multiply instead of add
 # 3 - input and store at address given by parameter
@@ -20,7 +20,7 @@
 #
 # ABCDE
 #  1002
-# 
+#
 # DE - two-digit opcode,      02 == opcode 2
 #  C - mode of 1st parameter,  0 == position mode
 #  B - mode of 2nd parameter,  1 == immediate mode
@@ -42,7 +42,7 @@ OP_END = 99 # End
 MODE_POS = 0 # Position
 MODE_IMM = 1 # Immediate
 
-class Instruction(object):
+class Instruction():
     def __init__(self, instruction, program):
         # Store raw instruction and opcode
         self.raw = str(instruction)
@@ -95,13 +95,13 @@ class Instruction(object):
         for i in range(0, self.params_num):
             if self.params_modes[i] == MODE_POS:
                 # Address mode
-                self.params[i] =  program.mem[params[i]]
+                self.params[i] = program.mem[params[i]]
             else:
                 # Immediate mode
                 self.params[i] = params[i]
 
 
-class Program(object):
+class Program():
     def __init__(self, intcode):
         self.mem = intcode.copy()
         self.mem_size = len(self.mem)
@@ -109,7 +109,7 @@ class Program(object):
         self.finished = False
 
 
-    def process(self, verbose = True):
+    def process(self, verbose=True):
         self.ins_ptr = 0
         while True:
             # Process opcode
@@ -119,7 +119,7 @@ class Program(object):
                 self._math(ins, lambda x, y: x + y)
             elif ins.opcode == OP_MUL:
                 self._math(ins, lambda x, y: x * y)
-            elif ins.opcode in [OP_IN,  OP_OUT]:
+            elif ins.opcode in [OP_IN, OP_OUT]:
                 self._io(ins)
             elif ins.opcode in [OP_EQ, OP_LT]:
                 self._logic_cmp(ins)

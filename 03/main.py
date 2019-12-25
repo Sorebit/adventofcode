@@ -9,7 +9,7 @@ sys.path.append('../')
 from modules.utils import check
 
 
-class Wire(object):
+class Wire():
     def __init__(self, lines):
         self.lines = lines
         self.visited = {} # self.visited[x][y] = step_count
@@ -28,18 +28,18 @@ class Wire(object):
         return x in self.visited and y in self.visited[x]
 
 
-    def traverse(self, other = None):
+    def traverse(self, other=None):
         lookup = {"U": [0, 1], "D": [0, -1], "L": [-1, 0], "R": [1, 0]}
         x, y = 0, 0
         for line in self.lines:
             # Calculate deltas used for traversing each field
             dx, dy = lookup[line[:1]]
             distance = int(line[1:])
-            
+
             # Actually visit fields
             for _ in range(distance):
                 self._visit(x, y)
-                
+
                 # Check for crossings if other Wire passed as param
                 if other and (x, y) != (0, 0) and other._is_visited(x, y):
                     # We've got a crosssing
@@ -95,7 +95,7 @@ def main():
     solve("tests/2.txt", "tests/2_out.txt")
     solve("tests/3.txt", "tests/3_out.txt")
     solve("input.txt")
-        
+
 
 if __name__ == '__main__':
     main()

@@ -4,11 +4,11 @@ def get_fuel(weight):
     return max(int(weight / 3) - 2, 0)
 
 def get_add_fuel(weight):
-    sum = 0;
+    fuel = 0
     while weight > 0:
-        sum += get_fuel(weight)
+        fuel += get_fuel(weight)
         weight = get_fuel(weight)
-    return sum
+    return fuel
 
 def main():
     with open("input.txt", "r") as file:

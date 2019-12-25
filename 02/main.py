@@ -3,8 +3,8 @@
 # Could be really dumbed down and doesn't need all that class stuff
 # I wanted to write it *properly*, though
 
-class Program(object):
-    def __init__(self, intcode, noun = None, verb = None):
+class Program():
+    def __init__(self, intcode, noun=None, verb=None):
         # Copy program, then substitute noun and verb
         self.mem = intcode.copy()
         self.mem_size = len(self.mem)
@@ -13,11 +13,12 @@ class Program(object):
             self.mem[1] = noun
             self.mem[2] = verb
 
-    # 1 - Read three next cells (x, y, z) read memory at adresses x and y, 
+
+    # 1 - Read three next cells (x, y, z) read memory at adresses x and y,
     #     add them and store at address z, then move instruction pointer
     # 2 - like 1, but multiply instead of add
     # 99 - end the program
-    # otherwise, something went wrong 
+    # otherwise, something went wrong
     def process(self):
         self.ins_ptr = 0
         while True:
@@ -39,10 +40,12 @@ class Program(object):
         # Return first memory cell
         return self.mem[0]
 
+
     def program_do(self, op):
         params = self.mem[self.ins_ptr + 1 : self.ins_ptr + 4]
         self.mem[params[2]] = op(self.mem[params[0]], self.mem[params[1]])
         self.ins_ptr += len(params) + 1
+
 
     def print_memory(mem):
         mem_size = len(mem)
@@ -74,7 +77,7 @@ def test():
             Program.print_memory(program.mem)
 
     print("")
-  
+
 
 def main():
     print("Advent of Code 2019 - Day 2\n")

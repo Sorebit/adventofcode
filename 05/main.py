@@ -46,7 +46,7 @@ def test():
             Program.print_memory(program.mem)
 
     print("")
-  
+
 
 def main():
     # Test if it all ain't broke

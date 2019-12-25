@@ -16,17 +16,17 @@ NODE_ROOT = "COM"
 def dfs(node):
     if(node not in neighbours):
         return
-    for n in neighbours[node]:
-        dfs(n)
-        values[node] += values[n] + 1
+    for child in neighbours[node]:
+        dfs(child)
+        values[node] += values[child] + 1
 
 
 def count_orbits():
     dfs(NODE_ROOT)
 
     orbits = 0
-    for n in values:
-        orbits += values[n]
+    for node in values:
+        orbits += values[node]
 
     return orbits
 
@@ -71,7 +71,7 @@ def solve(data):
     return part1, part2
 
 
-def test(path, expected_path = None):
+def test(path, expected_path=None):
     data = None
     print("File:", path)
     with open(path, "r") as file:

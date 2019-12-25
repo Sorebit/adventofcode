@@ -1,18 +1,18 @@
 # https://adventofcode.com/2019/day/4
 
-def check_double(s):
-    for i in range(len(s) - 1):
-        if s[i] == s[i + 1]:
+def check_double(num):
+    for i in range(len(num) - 1):
+        if num[i] == num[i + 1]:
             return True
     return False
 
-        
-def check_part_2(s):
+
+def check_part_2(num):
     for i in range(1, 10):
-        if str(i) * 2 in s and not str(i) * 3 in s:
+        if str(i) * 2 in num and not str(i) * 3 in num:
             return True
     return False
-    
+
 
 def main():
     input_range = range(168630, 718098)
