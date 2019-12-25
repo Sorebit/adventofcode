@@ -1,13 +1,12 @@
 # https://adventofcode.com/2019/day/
 
+import sys
+sys.path.append('../')
+from modules.utils import check
+
+
 def solve(data):
     return None, None
-
-
-def check(value, expected):
-    if value == expected:
-        return "OK %s" % str(value)
-    return "Expected %s, got %s" % (str(expected), str(value))
 
 
 def test(path, expected_path = None):

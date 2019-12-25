@@ -4,6 +4,10 @@
 # It doesn't matter since not that better complexity for part 2.
 
 import math
+import sys
+sys.path.append('../')
+from modules.utils import check
+
 
 class Wire(object):
     def __init__(self, lines):
@@ -58,12 +62,6 @@ class Wire(object):
             self._visit(x, y)
 
         return self.closest, self.shortest
-
-
-def check(value, expected):
-    if value == expected:
-        return "OK %d" % value
-    return "Expected %d, got %d" % (expected, value)
 
 
 def solve(path, expected_path = None):

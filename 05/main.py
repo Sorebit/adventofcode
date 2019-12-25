@@ -2,8 +2,10 @@
 #
 # Turns out it was worth it.
 
-from intcode import Instruction
-from intcode import Program
+import sys
+sys.path.append('../')
+from modules.intcode import Instruction, Program
+
 
 # Test using small programs from website
 def test():

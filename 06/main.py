@@ -1,5 +1,10 @@
 # https://adventofcode.com/2019/day/6
 
+import sys
+sys.path.append('../')
+from modules.utils import check
+
+
 # Global, so should be cleared if you want to run solve again
 neighbours = {}
 values = {}
@@ -64,12 +69,6 @@ def solve(data):
     part2 = find_path("YOU", "SAN")
 
     return part1, part2
-
-
-def check(value, expected):
-    if value == expected:
-        return "OK %s" % str(value)
-    return "Expected %s, got %s" % (str(expected), str(value))
 
 
 def test(path, expected_path = None):
