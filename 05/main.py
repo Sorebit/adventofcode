@@ -4,7 +4,7 @@
 
 import sys
 sys.path.append('../')
-from modules.intcode import Instruction, Program
+from modules.intcode import Program
 
 
 # Test using small programs from website
