@@ -107,6 +107,9 @@ class Program():
         self.mem_size = len(self.mem)
         self.ins_ptr = 0
         self.finished = False
+        self.static_input = None
+        self.static_input_ind = 0
+        self.last_output = None
 
 
     def process(self, verbose=True):
@@ -142,7 +145,14 @@ class Program():
 
         if verbose:
             print("Done.")
-        print()
+            print()
+
+    
+    def set_input(self, input_arr):
+        """
+        Sets provided array as an input source to read from
+        """
+        self.static_input = input_arr.copy()
 
 
     def _math(self, ins, op):
@@ -151,11 +161,20 @@ class Program():
 
     def _io(self, ins):
         if ins.opcode == OP_IN:
-            # Assume okay input
-            inp = int(input("IN: "))
+            if self.static_input is None:
+                # Assume okay input
+                inp = int(input("IN: "))
+            else:
+                inp = self.static_input[self.static_input_ind]
+                self.static_input_ind += 1
+            
             self.mem[ins.params[0]] = inp
         else:
-            print("OUT >> %d" % ins.params[0])
+            # Output and save last output (used for 07/part 1)
+            if not self.mute_output:
+                print("OUT >> %d" % ins.params[0])
+
+            self.last_output = ins.params[0]
 
 
     def _logic_jmp(self, ins):
