@@ -5,28 +5,26 @@
 
 import math
 import sys
-sys.path.append('../')
+
+sys.path.append("../")
 from modules.utils import check
 
 
-class Wire():
+class Wire:
     def __init__(self, lines):
         self.lines = lines
-        self.visited = {} # self.visited[x][y] = step_count
+        self.visited = {}  # self.visited[x][y] = step_count
         self.closest = math.inf
         self.shortest = math.inf
         self.step_counter = 0
-
 
     def _visit(self, x, y):
         if x not in self.visited:
             self.visited[x] = {}
         self.visited[x][y] = self.step_counter
 
-
     def _is_visited(self, x, y):
         return x in self.visited and y in self.visited[x]
-
 
     def traverse(self, other=None):
         lookup = {"U": [0, 1], "D": [0, -1], "L": [-1, 0], "R": [1, 0]}
@@ -51,7 +49,6 @@ class Wire():
                     crosss_step_count = self.visited[x][y] + other.visited[x][y]
                     self.shortest = min(self.shortest, crosss_step_count)
 
-
                 # Step in line direction
                 x, y = x + dx, y + dy
                 self.step_counter += 1
@@ -64,7 +61,7 @@ class Wire():
         return self.closest, self.shortest
 
 
-def solve(path, expected_path = None):
+def solve(path, expected_path=None):
     lines = None
     print("File:", path)
     with open(path, "r") as file:
@@ -97,5 +94,5 @@ def main():
     solve("input.txt")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

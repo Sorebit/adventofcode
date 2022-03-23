@@ -1,7 +1,8 @@
 # https://adventofcode.com/2019/day/6
 
 import sys
-sys.path.append('../')
+
+sys.path.append("../")
 from modules.utils import check
 
 
@@ -13,8 +14,9 @@ visited = {}
 
 NODE_ROOT = "COM"
 
+
 def dfs(node):
-    if(node not in neighbours):
+    if node not in neighbours:
         return
     for child in neighbours[node]:
         dfs(child)
@@ -51,7 +53,7 @@ def find_path(node_a, node_b):
 
 def solve(data):
     for edge in data:
-        node_a, node_b = edge[:-1].split(')')
+        node_a, node_b = edge[:-1].split(")")
 
         # Part 1 preprocessing
         if node_a not in neighbours:
@@ -63,7 +65,6 @@ def solve(data):
 
         # Part 2 preprocessing
         parents[node_b] = node_a
-
 
     part1 = count_orbits()
     part2 = find_path("YOU", "SAN")
@@ -98,5 +99,5 @@ def main():
     # test("tests/2.in", "tests/2.out")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

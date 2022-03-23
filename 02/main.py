@@ -3,7 +3,8 @@
 # Could be really dumbed down and doesn't need all that class stuff
 # I wanted to write it *properly*, though
 
-class Program():
+
+class Program:
     def __init__(self, intcode, noun=None, verb=None):
         # Copy program, then substitute noun and verb
         self.mem = intcode.copy()
@@ -12,7 +13,6 @@ class Program():
         if noun and verb:
             self.mem[1] = noun
             self.mem[2] = verb
-
 
     # 1 - Read three next cells (x, y, z) read memory at adresses x and y,
     #     add them and store at address z, then move instruction pointer
@@ -31,7 +31,10 @@ class Program():
             elif ins == 99:
                 break
             else:
-                print("Exception: Unknown instruction %d at address %d" % (ins, self.ins_ptr))
+                print(
+                    "Exception: Unknown instruction %d at address %d"
+                    % (ins, self.ins_ptr)
+                )
                 break
 
             if self.ins_ptr >= self.mem_size:
@@ -40,12 +43,10 @@ class Program():
         # Return first memory cell
         return self.mem[0]
 
-
     def program_do(self, op):
         params = self.mem[self.ins_ptr + 1 : self.ins_ptr + 4]
         self.mem[params[2]] = op(self.mem[params[0]], self.mem[params[1]])
         self.ins_ptr += len(params) + 1
-
 
     def print_memory(mem):
         mem_size = len(mem)
@@ -58,10 +59,10 @@ class Program():
 def test():
     print("Testing:")
     tests = [
-        {"in": [1,0,0,0,99], "out": [2,0,0,0,99]},
-        {"in": [2,3,0,3,99], "out": [2,3,0,6,99]},
-        {"in": [2,4,4,5,99,0], "out": [2,4,4,5,99,9801]},
-        {"in": [1,1,1,4,99,5,6,0,99], "out": [30,1,1,4,2,5,6,0,99]}
+        {"in": [1, 0, 0, 0, 99], "out": [2, 0, 0, 0, 99]},
+        {"in": [2, 3, 0, 3, 99], "out": [2, 3, 0, 6, 99]},
+        {"in": [2, 4, 4, 5, 99, 0], "out": [2, 4, 4, 5, 99, 9801]},
+        {"in": [1, 1, 1, 4, 99, 5, 6, 0, 99], "out": [30, 1, 1, 4, 2, 5, 6, 0, 99]},
     ]
 
     for test_num in range(0, len(tests)):
@@ -103,5 +104,5 @@ def main():
                 print("Result: %d" % (100 * noun + verb))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

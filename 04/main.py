@@ -1,5 +1,6 @@
 # https://adventofcode.com/2019/day/4
 
+
 def check_double(num):
     for i in range(len(num) - 1):
         if num[i] == num[i + 1]:
@@ -22,7 +23,7 @@ def main():
     for num in input_range:
         num = str(num)
         # Check if ascending numbers
-        if ''.join(sorted(num)) != num:
+        if "".join(sorted(num)) != num:
             continue
         if check_double(num):
             part_1 += 1
@@ -33,5 +34,5 @@ def main():
     print("Part 2:", part_2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

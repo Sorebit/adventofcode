@@ -28,26 +28,27 @@
 #                                   omitted due to being a leading zero
 
 # Define opcodes
-OP_ADD =  1 # Add
-OP_MUL =  2 # Multiply
-OP_IN  =  3 # Input
-OP_OUT =  4 # Output
-OP_JNZ =  5 # Jump if non-zero (true)
-OP_JZR =  6 # Jump if zero (false)
-OP_LT  =  7 # Less than
-OP_EQ  =  8 # Equals
-OP_END = 99 # End
+OP_ADD = 1  # Add
+OP_MUL = 2  # Multiply
+OP_IN = 3  # Input
+OP_OUT = 4  # Output
+OP_JNZ = 5  # Jump if non-zero (true)
+OP_JZR = 6  # Jump if zero (false)
+OP_LT = 7  # Less than
+OP_EQ = 8  # Equals
+OP_END = 99  # End
 
 # Define modes
-MODE_POS = 0 # Position
-MODE_IMM = 1 # Immediate
+MODE_POS = 0  # Position
+MODE_IMM = 1  # Immediate
 
-class Instruction():
+
+class Instruction:
     def __init__(self, instruction, program):
         # Store raw instruction and opcode
         self.raw = str(instruction)
         self.opcode = int(self.raw[-2:])
-        self.auto_inc = True # Whether ins pointer should auto increase after op
+        self.auto_inc = True  # Whether ins pointer should auto increase after op
         self.params_num = 0
 
         # Set params number
@@ -71,7 +72,6 @@ class Instruction():
             for i in range(0, len(params_raw)):
                 self.params_modes[i] = int(params_raw[len(params_raw) - i - 1])
 
-
         # Assignment fix
         # E.g.
         # pvalue = ins.param[0] + ins.param[1]
@@ -85,7 +85,6 @@ class Instruction():
             self.params_modes[self.params_num - 1] = MODE_IMM
 
         self._apply_modes(program)
-
 
     # Apply modes to params
     def _apply_modes(self, program):
@@ -101,7 +100,7 @@ class Instruction():
                 self.params[i] = params[i]
 
 
-class Program():
+class Program:
     def __init__(self, intcode):
         self.mem = intcode.copy()
         self.mem_size = len(self.mem)
@@ -110,7 +109,6 @@ class Program():
         self.static_input = None
         self.static_input_ind = 0
         self.last_output = None
-
 
     def process(self, verbose=True):
         self.ins_ptr = 0
@@ -132,7 +130,10 @@ class Program():
                 self.finished = True
                 break
             else:
-                print("Exception: Unknown instruction %s at address %d" % (ins.raw, self.ins_ptr))
+                print(
+                    "Exception: Unknown instruction %s at address %d"
+                    % (ins.raw, self.ins_ptr)
+                )
                 break
 
             # Move instruction pointer forwards
@@ -147,17 +148,14 @@ class Program():
             print("Done.")
             print()
 
-    
     def set_input(self, input_arr):
         """
         Sets provided array as an input source to read from
         """
         self.static_input = input_arr.copy()
 
-
     def _math(self, ins, op):
         self.mem[ins.params[2]] = op(ins.params[0], ins.params[1])
-
 
     def _io(self, ins):
         if ins.opcode == OP_IN:
@@ -167,7 +165,7 @@ class Program():
             else:
                 inp = self.static_input[self.static_input_ind]
                 self.static_input_ind += 1
-            
+
             self.mem[ins.params[0]] = inp
         else:
             # Output and save last output (used for 07/part 1)
@@ -175,7 +173,6 @@ class Program():
                 print("OUT >> %d" % ins.params[0])
 
             self.last_output = ins.params[0]
-
 
     def _logic_jmp(self, ins):
         if ins.opcode == OP_JNZ and ins.params[0] != 0:
@@ -185,13 +182,11 @@ class Program():
         else:
             self.ins_ptr += ins.params_num + 1
 
-
     def _logic_cmp(self, ins):
         if ins.opcode == OP_EQ:
             self.mem[ins.params[2]] = int(ins.params[0] == ins.params[1])
         elif ins.opcode == OP_LT:
             self.mem[ins.params[2]] = int(ins.params[0] < ins.params[1])
-
 
     def print_memory(mem):
         mem_size = len(mem)

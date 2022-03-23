@@ -1,7 +1,8 @@
 # https://adventofcode.com/2019/day/
 
 import sys
-sys.path.append('../')
+
+sys.path.append("../")
 from modules.utils import check
 
 
@@ -9,7 +10,7 @@ def solve(data):
     return None, None
 
 
-def test(path, expected_path = None):
+def test(path, expected_path=None):
     data = None
     print("File:", path)
     with open(path, "r") as file:
@@ -36,5 +37,5 @@ def main():
     # test("tests/1.in", "tests/1.out")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

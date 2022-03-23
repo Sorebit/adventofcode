@@ -15,7 +15,7 @@ def solve(raw_intcode, phases):
     amp = None
     for i in range(5):
         amp = Program(raw_intcode)
-        #print(f"Starting {i} | phase: {phases[i]} | input: {current_input}")
+        # print(f"Starting {i} | phase: {phases[i]} | input: {current_input}")
         amp.set_input([phases[i], current_input])
         amp.mute_output = True
 
@@ -50,7 +50,7 @@ def test(path, expected_path=None):
 
 def main():
     # test("input.txt")
-    #test("tests/1.in", "tests/1.out")
+    # test("tests/1.in", "tests/1.out")
 
     raw_intcode = None
     # Open input intcodes and solve
@@ -59,12 +59,12 @@ def main():
 
     # Solve part 1
     print("Part 1")
-    
+
     phases = list(range(5))
     permutations = list(itertools.permutations(phases))
     best = -math.inf
-    
-    for p in permutations: 
+
+    for p in permutations:
         output = solve(raw_intcode, p)
         best = max(best, output)
 

@@ -1,7 +1,9 @@
 # https://adventofcode.com/2019/day/1
 
+
 def get_fuel(weight):
     return max(int(weight / 3) - 2, 0)
+
 
 def get_add_fuel(weight):
     fuel = 0
@@ -9,6 +11,7 @@ def get_add_fuel(weight):
         fuel += get_fuel(weight)
         weight = get_fuel(weight)
     return fuel
+
 
 def main():
     with open("input.txt", "r") as file:
@@ -20,5 +23,6 @@ def main():
         print("Part 1:", part1)
         print("Part 2:", part2)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
