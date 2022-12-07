@@ -1,12 +1,7 @@
 """Advent-of-Code-specific helpers"""
-from enum import Enum, auto
-import functools
-import operator
 from os import getenv
 from pathlib import Path
-import string
 import re
-import sys
 
 
 def lines(p: Path, strip: bool = True):
