@@ -1,27 +1,10 @@
-from enum import Enum, auto
 import functools
 import operator
-from os import getenv
 from pathlib import Path
 import string
+import sys
 
-class Reader:
-    """_summary_
-    """
-    @classmethod
-    def lines(cls, p: Path, strip: bool = True):
-        """Yields lines from file :param p: for processing them with or without storage. Opt-out withespace strip"""
-        with open(p, 'r') as file:
-            for line in file.readlines():
-                if strip:
-                    yield line.strip()
-                else:
-                    yield line
-
-
-VERBOSE = getenv('VERBOSE')
-
-
+from aoc import lines
 
 
 def find_bad_item(backpack: str) -> str:
@@ -67,19 +50,19 @@ def priority(item: str) -> int:
     return item_types.find(item) + 1
 
 
-def run(in_file: Path):
+def solve(in_file: Path):
     result_1 = 0
-    
+
     elves_per_group = 3
     counter = 0
     group = []
     result_2 = 0
-    
-    for line in Reader.lines(in_file):
+
+    for line in lines(in_file):
         bad_item = find_bad_item(line)
         # The result is the sum of priorities
         result_1 += priority(bad_item)
-        
+
         # Part 2
         group.append(line)
         counter += 1
@@ -92,7 +75,10 @@ def run(in_file: Path):
 
     return result_1, result_2
 
-        
-part_1, part_2 = run(Path('./in/input'))
-assert (part_1, part_2) == (8252, 2828)
-print(part_1, part_2)
+
+if __name__ == '__main__':
+    # python template.py <input path>
+    in_file = Path(sys.argv[1])
+    part_1, part_2 = solve(in_file)
+    print(part_1, part_2)
+    assert (part_1, part_2) == (8252, 2828)

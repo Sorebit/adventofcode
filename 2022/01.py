@@ -2,20 +2,17 @@ from os import getenv
 from pathlib import Path
 import sys
 
-from ..aoc import lines, TopN
+from aoc import lines, TopN, VERBOSE
 
 
-VERBOSE = getenv('VERBOSE')
-
-
-def run(in_file: Path, cap: int = 1):
+def solve(in_file: Path, cap: int = 1):
 
     if VERBOSE:
         print(f'Running with input from {in_file}')
-    
+
     top = TopN(cap)
     elf_calories = 0
-    
+
     for line in lines(in_file):
         if VERBOSE:
             print(':', line)
@@ -34,17 +31,18 @@ def run(in_file: Path, cap: int = 1):
         if VERBOSE:
             print(f'Elf carries: {elf_calories}')
             print(f'Top {cap}: {top}')
-    
+
     if VERBOSE:
         print(f'Sum of best {cap}: {top.sum()}')
 
     return top.sum()
 
 
-print(sys.argv)
-p = Path(sys.argv[1])
-part_1 = run(p)
-part_2 = run(p, cap=3)
-
-print(f'Part 1: {part_1}')
-print(f'Part 2: {part_2}')
+if __name__ == '__main__':
+    # python 01.py <input path>
+    in_file = Path(sys.argv[1])
+    part_1 = solve(in_file)
+    part_2 = solve(in_file, cap=3)
+    print(part_1, part_2)
+    assert part_1 == 72478
+    assert part_2 == 210367
