@@ -14,7 +14,7 @@ def solve(in_file: Path):
 
 
 if __name__ == '__main__':
-    # python nn.py in/nn/...
+    # python {{nn}}.py in/{{nn}}/...
     in_file = Path(sys.argv[1])
     part_1, part_2 = solve(in_file)
     print(part_1, part_2)
