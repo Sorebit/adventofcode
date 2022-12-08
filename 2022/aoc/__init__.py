@@ -52,4 +52,6 @@ class TopN:
         return str(self._stack)
 
 
+# TODO: Logger with verbosity set by env vars
+#       to get rid of the nasty if VERBOSE: print(...)
 VERBOSE = getenv('VERBOSE')
