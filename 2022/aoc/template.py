@@ -1,13 +1,13 @@
 from pathlib import Path
 import sys
 
-import aoc
+from aoc import lines
 
 
 def solve(in_file: Path):
     result_1, result_2 = 0, 0
 
-    for line in aoc.lines(in_file):
+    for line in lines(in_file):
         print(line)
 
     return result_1, result_2
