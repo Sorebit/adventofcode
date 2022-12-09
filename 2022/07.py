@@ -4,7 +4,7 @@ import pprint
 import sys
 # from typing import Self
 
-from aoc import lines, lmap
+from aoc import lines
 
 
 @dataclass
@@ -16,13 +16,12 @@ class Node:
     size: int | None = None
 
     def print(self, indent: int = 0):
-        if not self.is_dir:
-            print('  ' * indent, f'- {self.name} (file, size={self.size})')
-            return
+        node_type = 'dir' if self.is_dir else 'file'
+        print(f'{"  " * indent}- {self.name} ({node_type}, size={self.size})')
 
-        print('  ' * indent, '-', f'{self.name} (dir, size={self.size})')
-        for child in self.children.values():
-            child.print(indent + 1)
+        if self.is_dir:
+            for child in self.children.values():
+                child.print(indent + 1)
 
     def sizes(self):
         """Updates sizes of self and all subdirectories"""
@@ -40,37 +39,28 @@ class Node:
         return self.size
 
     def find(self, predicate):
-        found = []
+        """Treating self as root of tree, yield all nodes that satisfy predicate"""
         if predicate(self):
-            found.append(self)
+            yield self
 
         if self.is_dir:
             for child in self.children.values():
-                found += child.find(predicate)
-
-        return found
-
+                yield from child.find(predicate)
 
 
 current_node = None
 root = Node(is_dir=True, name='/', children={}, parent=None)
 
+
 def change_dir(name):
     global current_node
 
     if name == '/':
-        print('  CD:', '/ (root)')
         current_node = root
     elif name == '..':
-        print('  CD:', '.. (up)')
         current_node = current_node.parent
     else:
-        print('  CD:', name)
         current_node = current_node.children[name]
-
-
-def ls():
-    print('  LS:')
 
 
 def solve(in_file: Path):
@@ -83,37 +73,30 @@ def solve(in_file: Path):
             _, *command = line.split()
             if command[0] == 'cd':
                 change_dir(command[1])
-            else:
-                ls()
             continue
 
         # File or directory
         sz_or_dir, name = line.split()
         if sz_or_dir == 'dir':
             is_dir, children, size = True, {}, None
-            print(' DIR:', name)
-            # if name not in current_node.children:
-            #     current_node.children[name] = Node(
-            #         is_dir=True, name=name, children={}, parent=current_node)
         else:
-            print('FILE:', name, size)
             is_dir, children, size = False, None, int(sz_or_dir)
 
         if name not in current_node.children:
             current_node.children[name] = Node(
                 is_dir=is_dir, name=name, children=children, parent=current_node, size=size)
 
-    # Calc part 1
+    # Part 1
     root.sizes()
     root.print()
-
     found = root.find(lambda n: n.is_dir and n.size <= 100000)
-    result_1 = sum(map(lambda n: n.size, found))
+    result_1 = sum(n.size for n in found)
 
+    # Part 2
     free = 70000000 - root.size
     at_least = 30000000 - free
     candidates = root.find(lambda n: n.is_dir and n.size >= at_least)
-    result_2 = min(map(lambda n: n.size, candidates))
+    result_2 = min(n.size for n in candidates)
 
     return result_1, result_2
 
