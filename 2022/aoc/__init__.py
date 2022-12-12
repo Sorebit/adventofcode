@@ -4,19 +4,7 @@ from pathlib import Path
 import re
 
 
-def lines(p: Path, strip: bool = True):
-    """Yields lines from file :param p: for processing them with or without storage. Opt-out withespace strip"""
-    with open(p, 'r') as file:
-        for line in file.readlines():
-            if strip:
-                yield line.strip()
-            else:
-                yield line
-
-
-def lmap(func, *iterables):
-    return list(map(func, *iterables))
-
+# Input parsing helpers
 
 def find_all_positive(s: str):
     """Return all positive integers found in given string"""
@@ -30,6 +18,28 @@ def find_all_ints(s: str) -> list[int]:
     """Return all integers found in given string"""
     return [int(m.group()) for m in re.finditer(r'-?\d+', s)]
 
+
+def lines(p: Path, strip: bool = True):
+    """Yields lines from file :param p: for processing them with or without storage. Opt-out withespace strip"""
+    with open(p, 'r') as file:
+        for line in file.readlines():
+            if strip:
+                yield line.strip()
+            else:
+                yield line
+
+
+# Func. helpers
+
+def lmap(func, *iterables):
+    return list(map(func, *iterables))
+
+
+def lrev(iterable):
+    return list(reversed(iterable))
+
+
+# Structures
 
 class TopN:
     """A structure that keeps track of only the top N biggest items"""
