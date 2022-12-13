@@ -16,8 +16,8 @@ class V:
     def __sub__(self, other):
         return V(x=self.x-other.x, y=self.y-other.y)
 
-
-    def from_input(direction):
+    @classmethod
+    def from_input(cls, direction):
         choices = {
             'U': V(x=0, y=1),
             'D': V(x=0, y=-1),
@@ -36,7 +36,7 @@ class V:
 
 
 class Rope:
-    def __init__(self, seg_count: int, start: V):
+    def __init__(self, seg_count: int, start: V) -> None:
         self.segments: list[V] = [start] * seg_count
         self.visited: set[V] = {start}
 
@@ -48,7 +48,7 @@ class Rope:
     def tail(self) -> V:
         return self.segments[-1]
 
-    def move_head(self, m):
+    def move_head(self, m: V) -> None:
         """m - unit direction"""
         for i, _ in enumerate(self.segments):
             if i == 0:
@@ -66,7 +66,6 @@ class Rope:
 
 
 def solve(in_file: Path):
-
     short = Rope(2, V(x=0, y=0))
     long = Rope(10, V(x=0, y=0))
 
@@ -78,7 +77,6 @@ def solve(in_file: Path):
         for _ in range(count):
             short.move_head(move)
             long.move_head(move)
-
 
     return len(short.visited), len(long.visited)
 
