@@ -1,6 +1,8 @@
 """Advent-of-Code-specific helpers"""
+from dataclasses import dataclass
 from os import getenv
 from pathlib import Path
+import math
 import re
 
 
@@ -65,3 +67,54 @@ class TopN:
 # TODO: Logger with verbosity set by env vars
 #       to get rid of the nasty if VERBOSE: print(...)
 VERBOSE = getenv('VERBOSE')
+
+
+import numpy as np
+
+
+# class V:
+#     def __init__(self, x, y) -> None:
+#         self._ = np.array([x, y])
+
+#     @property
+#     def x(self):
+#         return self._[0]
+
+#     @property
+#     def y(self):
+#         return self._[1]
+
+
+@dataclass(frozen=True)
+class V:
+    x: int
+    y: int
+
+    def __add__(self, other):
+        return V(x=self.x+other.x, y=self.y+other.y)
+
+    def __sub__(self, other):
+        return V(x=self.x-other.x, y=self.y-other.y)
+
+    @classmethod
+    def from_direction(cls, direction):
+        """Up, down, left, or right unit vector."""
+        choices = {
+            'U': V(x=0, y=1),
+            'D': V(x=0, y=-1),
+            'L': V(x=-1, y=0),
+            'R': V(x=1, y=0),
+        }
+        return choices[direction]
+
+    def __repr__(self) -> str:
+        return f'V({self.x}, {self.y})'
+
+    def chebyshev_unit(self):
+        """A 2D vector of length=1 in Chebyshev metric.
+
+        (A diagonal move is a unit vector on a chess board)
+        """
+        x = self.x // abs(self.x) if self.x != 0 else 0
+        y = self.y // abs(self.y) if self.y != 0 else 0
+        return V(x=x, y=y)

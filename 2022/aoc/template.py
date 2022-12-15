@@ -1,4 +1,5 @@
 from pathlib import Path
+from pprint import pprint
 import sys
 
 from aoc import lines

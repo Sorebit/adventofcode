@@ -50,18 +50,21 @@ class Rope:
 
     def move_head(self, m: V) -> None:
         """m - unit direction"""
+        # Actually, move all segments, too.
         for i, _ in enumerate(self.segments):
             if i == 0:
                 # Move head
                 self.segments[i] += m
                 continue
-
+            # Each as a response to the previous one
             diff = self.segments[i-1] - self.segments[i]
+
+            # When segments are not touching
             if abs(diff.x) > 1 or abs(diff.y) > 1:
-                # Not neighboring, move tail in head's general direction
+                # move 'tail' in 'head's' general direction
                 self.segments[i] += diff.unit()
 
-        # Update tail visits
+        # Tail has officially visited this place
         self.visited.add(self.tail)
 
 
