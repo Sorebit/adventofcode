@@ -1,5 +1,6 @@
 """Advent-of-Code-specific helpers"""
 from dataclasses import dataclass
+import heapq
 from os import getenv
 from pathlib import Path
 import math
@@ -118,3 +119,38 @@ class V:
         x = self.x // abs(self.x) if self.x != 0 else 0
         y = self.y // abs(self.y) if self.y != 0 else 0
         return V(x=x, y=y)
+
+    def __lt__(self, other) -> bool:
+        """Anything to order these (x, then y)"""
+        if self.x < other.x:
+            return True
+        return self.y < other.y
+
+
+class PQFrontier:
+    def __init__(self, initial=None):
+        """
+            initial - Optional list of (priority, item) tuples
+        """
+        self.frontier = initial or []
+        heapq.heapify(self.frontier)
+        # Assume the same node will not be added twice
+        self.nodes = set()
+        for p, node in self.frontier:
+            self.nodes.add(node)
+
+    def add(self, priority, node):
+        """Assumes the same node will not be added twice"""
+        heapq.heappush(self.frontier, (priority, node))
+        self.nodes.add(node)
+
+    def take(self):
+        p, node = heapq.heappop(self.frontier)
+        self.nodes.remove(node)
+        return (p, node)
+
+    def empty(self):
+        return len(self.frontier) == 0
+
+    def contains(self, node):
+        return node in self.nodes
