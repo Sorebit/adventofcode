@@ -64,7 +64,7 @@ class Packet:
 
     @classmethod
     def from_line(cls, line):
-        return Packet(eval(line))
+        return cls(eval(line))
 
     def __repr__(self) -> str:
         return repr(self.s)
