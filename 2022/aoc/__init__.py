@@ -14,7 +14,13 @@ def find_all_positive(s: str):
     # finditer is a bit of an overkill, since the dataset is so small (4 ints per 1000 lines)
     # but I'm trying to force some good practices into my mind with this year's advent.
     # return [int(m) for m in re.findall(r'\d+', s)]
-    return [int(m.group()) for m in re.finditer(r'\d+', s)]
+    return list(positive_g(s))
+
+
+def positive_g(s: str):
+    """Like find_all_positive but a generator"""
+    for m in re.finditer(r'\d+', s):
+        yield int(m.group())
 
 
 def find_all_ints(s: str) -> list[int]:

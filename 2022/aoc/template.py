@@ -1,3 +1,4 @@
+import itertools
 from pathlib import Path
 from pprint import pprint
 import sys
