@@ -9,6 +9,12 @@ import re
 
 # Input parsing helpers
 
+def positive_g(s: str):
+    """Like find_all_positive but a generator"""
+    for m in re.finditer(r'\d+', s):
+        yield int(m.group())
+
+
 def find_all_positive(s: str):
     """Return all positive integers found in given string"""
     # finditer is a bit of an overkill, since the dataset is so small (4 ints per 1000 lines)
@@ -17,15 +23,15 @@ def find_all_positive(s: str):
     return list(positive_g(s))
 
 
-def positive_g(s: str):
-    """Like find_all_positive but a generator"""
-    for m in re.finditer(r'\d+', s):
+def ints_g(s: str):
+    """Like find_all_ints but a generator"""
+    for m in re.finditer(r'-?\d+', s):
         yield int(m.group())
 
 
 def find_all_ints(s: str) -> list[int]:
     """Return all integers found in given string"""
-    return [int(m.group()) for m in re.finditer(r'-?\d+', s)]
+    return list(ints_g(s))
 
 
 def lines(p: Path, strip: bool = True):
@@ -131,6 +137,10 @@ class V:
         if self.x < other.x:
             return True
         return self.y < other.y
+
+
+def manhattan(a: V, b: V) -> int:
+    return abs(a.x - b.x) + abs(a.y - b.y)
 
 
 class PQFrontier:

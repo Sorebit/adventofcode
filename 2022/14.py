@@ -191,7 +191,7 @@ def solve(in_file: Path):
 
 
 
-    return result_1, result_2
+    return result_1, result_2 + 1
 
 
 if __name__ == '__main__':

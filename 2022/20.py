@@ -128,7 +128,7 @@ def solve(in_file: Path, dec_key=1, mix_rounds=1):
     print('\n')
 
     for r in range(mix_rounds):
-        print(f'Round {r}')
+        print(f'Round {r+1} / {mix_rounds}')
         for o in original:
             swaps = o.value % (list_len - 1)
             for _ in range(swaps):
