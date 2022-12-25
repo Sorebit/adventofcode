@@ -143,6 +143,21 @@ def manhattan(a: V, b: V) -> int:
     return abs(a.x - b.x) + abs(a.y - b.y)
 
 
+def pm3d():
+    return [
+        (1, 0, 0),
+        (-1, 0, 0),
+        (0, 1, 0),
+        (0, -1, 0),
+        (0, 0, 1),
+        (0, 0, -1),
+    ]
+
+
+def vec_sum(a, b):
+    return tuple(a_i + b_i for a_i, b_i in zip(a, b))
+
+
 class PQFrontier:
     def __init__(self, initial=None):
         """
@@ -170,3 +185,8 @@ class PQFrontier:
 
     def contains(self, node):
         return node in self.nodes
+
+
+def swap_kv(d: dict) -> dict:
+    """Returns a dictionary where keys are swapped with values"""
+    return {v: k for k, v in d.items()}
