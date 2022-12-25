@@ -91,9 +91,8 @@ def count_empty(elves):
 
     return result
 
-def solve(in_file: Path, rounds=None):
-    result = 0
 
+def solve(in_file: Path, rounds=None):
     elves = set()
 
     for y, line in enumerate(lines(in_file)):
