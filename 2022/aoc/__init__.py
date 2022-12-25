@@ -143,15 +143,35 @@ def manhattan(a: V, b: V) -> int:
     return abs(a.x - b.x) + abs(a.y - b.y)
 
 
+def pm2d():
+    """U, D, L, R = pm2d()"""
+    return (
+        V(0, -1),
+        V(0, 1),
+        V(-1, 0),
+        V(1, 0),
+    )
+
+
+def eight2d():
+    """U, D, L, R, UL, UR, DL, DR = eight2d()"""
+    return pm2d() + (
+        V(-1, -1),
+        V(1, -1),
+        V(-1, 1),
+        V(1, 1),
+    )
+
+
 def pm3d():
-    return [
+    return (
         (1, 0, 0),
         (-1, 0, 0),
         (0, 1, 0),
         (0, -1, 0),
         (0, 0, 1),
         (0, 0, -1),
-    ]
+    )
 
 
 def vec_sum(a, b):
