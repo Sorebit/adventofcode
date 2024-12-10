@@ -5,7 +5,7 @@ from aoc import lines
 
 
 def solve(in_file: Path):
-    result_1, result_2 = 0, 0
+    result_1 = 0
 
     reg = {'x': 1}  # A dict, so it's easily mutated from inside add.inner
     x_during = []
@@ -44,8 +44,10 @@ def solve(in_file: Path):
             operation()
 
     # Part 1
-    for c in range(19, len(x_during), 40):
-        result_1 += x_during[c] * (c+1)
+    result_1 = sum(
+        x_during[c] * (c+1)
+        for c in range(19, len(x_during), 40)
+    )
 
     # Part 2
     for c, x in enumerate(x_during):
@@ -60,11 +62,11 @@ def solve(in_file: Path):
     for line in crt:
         print(line)
 
-    return result_1, result_2
+    return result_1
 
 
 if __name__ == '__main__':
     # python {{nn}}.py in/{{nn}}/...
     in_file = Path(sys.argv[1])
-    part_1, part_2 = solve(in_file)
-    print(part_1, part_2)
+    part_1 = solve(in_file)
+    print(part_1)
