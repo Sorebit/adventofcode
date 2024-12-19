@@ -8,6 +8,14 @@ import (
     "strings"
 )
 
+func ReadFile(filename string) string {
+    content, err := os.ReadFile(filename)
+    if err != nil {
+        log.Fatal(err)
+    }
+    return string(content)
+}
+
 func ReadLines(filename string) []string {
     f, err := os.Open(filename)
     if err != nil {
@@ -37,8 +45,7 @@ func ReadIntsInLines(filename string) [][]int {
         fields := strings.Fields(line)
         nums := make([]int, len(fields))
         for i, n := range fields {
-            parsed, _ := strconv.ParseInt(n, 0, 32)
-            nums[i] = int(parsed)
+            nums[i] = Int(n)
         }
 
         result[line_idx] = nums
@@ -53,3 +60,10 @@ func Abs(v int) int {
     return v
 }
 
+func Int(v string) int {
+    n, err := strconv.ParseInt(v, 0, 32)
+    if err != nil {
+        log.Fatal(err)
+    }
+    return int(n)
+}
