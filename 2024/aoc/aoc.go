@@ -81,7 +81,7 @@ func Int(v string) int {
 
 type Grouping func(int, int) int
 
-func GroupingRotate(x, y int) int {
+func GroupingColumns(x, y int) int {
     return x
 }
 

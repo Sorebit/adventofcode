@@ -16,7 +16,6 @@ func show(p [][]byte) {
     fmt.Println()
 }
 
-
 func count(puzzle [][]byte) int {
     total := 0
     forward := regexp.MustCompile("XMAS")
@@ -38,7 +37,7 @@ func one(puzzle [][]byte) int {
     total := 0
     total += count(puzzle)
 
-    columns := aoc.Group(puzzle, aoc.GroupingRotate)
+    columns := aoc.Group(puzzle, aoc.GroupingColumns)
     total += count(columns)
 
     diagsD := aoc.Group(puzzle, aoc.GroupingDiagForward)
@@ -49,24 +48,31 @@ func one(puzzle [][]byte) int {
     return total
 }
 
+func two(puzzle [][]byte) int {
+    extract := func(x1, y1, x2, y2 int) string {
+        b := []byte{puzzle[y1][x1], puzzle[y2][x2]}
+        return string(b)
+    }
 
-func two(puzzle [][]bytes) int {
-    "M.S"
-    ".A."
-    "M.S"
+    total := 0
+    for y := range len(puzzle) - 2 {
+        for x := range len(puzzle[y]) - 2 {
+            if string(puzzle[y+1][x+1]) != "A" {
+                continue
+            }
+            down := extract(x, y, x+2, y+2)
+            up := extract(x, y+2, x+2, y)
+            if down != "MS" && down != "SM" {
+                continue
+            }
+            if up != "MS" && up != "SM" {
+                continue
+            }
+            total += 1
+        }
+    }
 
-    "S.M"
-    ".A."
-    "S.M"
-
-    "M.M"
-    ".A."
-    "S.S"
-
-    "S.S"
-    ".A."
-    "M.M"
-    return 0
+    return total
 }
 
 
@@ -80,10 +86,10 @@ func main() {
     fmt.Printf("Reading from: %v\n", inName)
 
     puzzle := aoc.ReadBytes(inName)
-    show(puzzle)
+    //show(puzzle)
 
     ansOne := one(puzzle)
-    ansTwo := two()
+    ansTwo := two(puzzle)
     fmt.Printf("Part 1: %v\n", ansOne)
     fmt.Printf("Part 2: %v\n", ansTwo)
 }
