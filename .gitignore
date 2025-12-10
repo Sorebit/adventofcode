@@ -130,3 +130,6 @@ dmypy.json
 
 # Editor
 .swp
+
+# Don't publish my input files from aoc.com
+input
