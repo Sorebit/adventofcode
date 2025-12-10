@@ -63,6 +63,15 @@ func ReadIntsInLines(filename string) [][]int {
     return result
 }
 
+func AllInts(line, sep string) []int {
+    fields := strings.Split(line, sep)
+    nums := make([]int, len(fields))
+    for i, n := range fields {
+        nums[i] = Int(n)
+    }
+    return nums
+}
+
 func Abs(v int) int {
     if v < 0 {
         return -v
