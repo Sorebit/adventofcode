@@ -1,20 +1,20 @@
 import itertools
+import sys
 from pathlib import Path
 from pprint import pprint
-import sys
 
-from aoc import lines
+from aoc import read_lines
 
 
 def parse_in(filename: str | Path) -> list[int]:
     mul_lu = {
-        'L': -1,
-        'R': 1,
+        "L": -1,
+        "R": 1,
     }
     return [
         mul_lu[line[0]] * int(line[1:])
         # for line in parse_in("day1_example.in")
-        for line in lines(filename)
+        for line in read_lines(filename)
     ]
 
 
@@ -22,8 +22,9 @@ mod = 100
 check_for = 0
 start = 50
 
+
 def part_one(rotations):
-    result = 0    
+    result = 0
     current = start
     for rot in rotations:
         after = current + rot
@@ -33,6 +34,7 @@ def part_one(rotations):
         print(current)
 
     return result
+
 
 def check_crossings(current, rot):
     if rot == 0:
@@ -101,16 +103,22 @@ def test_suite():
 
 
 def test_check_crossings(test_case):
-    current=test_case["current"]
-    rot=test_case["rot"]
+    current = test_case["current"]
+    rot = test_case["rot"]
     expected_end = test_case["expected_end"]
     expected_crossings = test_case["expected_crossings"]
     brute_result, brute_end = brute_force(current, rot)
-    assert expected_crossings == brute_result, f"BAD LUCK {expected_crossings=} != {brute_result=} for {test_case=}"
-    assert expected_end == brute_end, f"BAD LUCK {expected_end=} != {brute_end=} for {test_case=}"
-    
+    assert (
+        expected_crossings == brute_result
+    ), f"BAD LUCK {expected_crossings=} != {brute_result=} for {test_case=}"
+    assert (
+        expected_end == brute_end
+    ), f"BAD LUCK {expected_end=} != {brute_end=} for {test_case=}"
+
     result = check_crossings(current, rot)
-    assert result == expected_crossings, f"{result} != {expected_crossings} for {test_case=}"
+    assert (
+        result == expected_crossings
+    ), f"{result} != {expected_crossings} for {test_case=}"
     print("")
 
 
@@ -130,14 +138,22 @@ def part_two(rotations):
     return result
 
 
-test_check_crossings({'current': 0, 'rot': -79, 'expected_end': 21, 'expected_crossings': 0})
+test_check_crossings(
+    {"current": 0, "rot": -79, "expected_end": 21, "expected_crossings": 0}
+)
 
 
 def gen_test_cases():
-    for line in lines("testcases.in"):
+    for line in read_lines("testcases.in"):
         current, rot, excepted_end, expected_crossings = map(int, line.split(","))
-        yield dict(current=current, rot=rot, expected_end=excepted_end, expected_crossings=expected_crossings)
-    
+        yield dict(
+            current=current,
+            rot=rot,
+            expected_end=excepted_end,
+            expected_crossings=expected_crossings,
+        )
+
+
 for test_case in gen_test_cases():
     print(test_case)
     test_check_crossings(test_case)
@@ -154,7 +170,7 @@ print(f"Part 2: {part_two_res}")
 def solve(in_file: Path):
     result_1, result_2 = 0, 0
 
-    for line in lines(in_file):
+    for line in read_lines(in_file):
         print(line)
 
     return result_1, result_2

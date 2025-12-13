@@ -1,16 +1,17 @@
-from collections import defaultdict
 import itertools
+import sys
+from collections import defaultdict
 from pathlib import Path
 from pprint import pprint
-import sys
 from typing import Literal
 
-from aoc import lines, vpprint, vprint, eight2d, V
+from aoc import V, eight2d, read_lines, vpprint, vprint
 
 FLOOR: str = "."
 PAPER: str = "@"
 
 directions = eight2d()
+
 
 class Map:
     def __init__(self, rows):
@@ -44,9 +45,9 @@ class Map:
         for delta in directions:
             target = pos + delta
             tile = self[target.y, target.x]
-            
+
             result[tile] += 1
-        
+
         return result
 
 
@@ -73,18 +74,18 @@ def find_removable(m: Map):
 
     return total, to_remove
 
+
 def remove_removable(m: Map, to_remove: list[tuple[int, int]]):
     for row, col in to_remove:
         m[row, col] = FLOOR
     return m
 
 
-
 def solve(in_file: Path):
     result_1, result_2 = 0, 0
 
-    rows = [line for line in lines(in_file)]
-    
+    rows = [line for line in read_lines(in_file)]
+
     m = Map(rows)
     result_1, to_remove = find_removable(m)
 
@@ -94,12 +95,11 @@ def solve(in_file: Path):
         result_2 += how_many
         if not how_many:
             break
-    
-    
+
     return result_1, result_2
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # python {{nn}}.py in/{{nn}}/...
     in_file = Path(sys.argv[1])
     part_1, part_2 = solve(in_file)

@@ -1,9 +1,9 @@
 import itertools
+import sys
 from pathlib import Path
 from pprint import pprint
-import sys
 
-from aoc import lines, vprint, lmap
+from aoc import lmap, read_lines, vprint
 
 
 def split_parts(s: str, n: int) -> list[str]:
@@ -34,7 +34,8 @@ def next_parzystokopytny(r: str):
     if len(r) % 2 == 0:
         return r
     return "1" + "0" * len(r)
-    
+
+
 def prev_parzystokopytny(r: str):
     """Prev (tylko jak trzeba) liczba która ma parzystą długość. Basically 999..."""
     if len(r) % 2 == 0:
@@ -59,7 +60,7 @@ def next_invalid(r: str) -> str:
         return left + left
     else:
         # ale 23,25 -> 24,24 -- a jak right > left, to left+1,left+1
-        next_left = str(int(left) + 1) 
+        next_left = str(int(left) + 1)
         return next_left + next_left
 
 
@@ -111,7 +112,7 @@ def prepare_range(r_start: str, r_end: str) -> list[tuple[str, str]]:
         pass
     return [(truly_fixed_start, truly_fixed_end)]
 
-    
+
 def prepare(ranges):
     prepared_ranges = []
     for range in ranges:
@@ -120,8 +121,8 @@ def prepare(ranges):
 
     # Looks like generally the input ranges don't overlap
     # for first, second in zip(prepared_ranges[:-1], prepared_ranges[1:]):
-        # if int(first[1]) > int(second[0]):
-            # raise ValueError(first, second)
+    # if int(first[1]) > int(second[0]):
+    # raise ValueError(first, second)
     return sorted(prepared_ranges, key=lambda pr: int(pr[0]))
 
 
@@ -130,42 +131,40 @@ def sum_range(fixed_start, fixed_end):
     start, _ = left_right(fixed_start)
     # z zalozenia (lol) wiemy ze maja tą samą długość
     l = len(start)
-    mult = 10 ** l
-    
+    mult = 10**l
+
     start = int(start)
 
     end, _ = left_right(fixed_end)
     end = int(end)
     vprint(": ", start, ",", end)
     vprint("*", mult)
-    # nie bede tu świrować, więc 
+    # nie bede tu świrować, więc
     total = sum(range(start, end + 1))
     vprint("+=", total)
     vprint(". ", total * (mult + 1))
     return total * (mult + 1)
 
+
 def solve(in_file: Path):
     result_1, result_2 = 0, 0
-    ranges = next(lines(in_file)).split(",")
+    ranges = next(read_lines(in_file)).split(",")
 
     prepared_ranges = prepare(ranges)
     pprint(prepared_ranges)
 
     for fixed_start, fixed_end in prepared_ranges:
         vprint(fixed_start, fixed_end)
-        
+
         if fixed_start == fixed_end:
             result_1 += int(fixed_start)
         else:
             result_1 += sum_range(fixed_start, fixed_end)
-        
-        
-    
 
     return result_1, result_2
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # python {{nn}}.py in/{{nn}}/...
     in_file = Path(sys.argv[1])
     part_1, part_2 = solve(in_file)

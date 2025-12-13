@@ -1,9 +1,10 @@
 import itertools
+import sys
 from pathlib import Path
 from pprint import pprint
-import sys
 from typing import Iterable
-from aoc import lines, vprint, vpprint, lmap
+
+from aoc import lmap, read_lines, vpprint, vprint
 
 
 def parse_input(lines_iter: Iterable[str]):
@@ -20,6 +21,7 @@ def parse_input(lines_iter: Iterable[str]):
             queries.append(int(line))
 
     return ranges, queries
+
 
 def prepare_ranges(ranges) -> list[list[int]]:
     all_ranges = list(sorted(ranges))
@@ -49,6 +51,7 @@ def prepare_ranges(ranges) -> list[list[int]]:
     # breakpoint()
     return flattened
 
+
 def is_valid(ranges, query) -> bool:
     """Way suboptimal, since range trees exist, but this is 1d with ~100 ranges"""
     vprint("Q", query)
@@ -58,10 +61,11 @@ def is_valid(ranges, query) -> bool:
             return True
     return False
 
+
 def solve(in_file: Path):
     result_1, result_2 = 0, 0
 
-    ranges, queries = parse_input(lines(in_file))
+    ranges, queries = parse_input(read_lines(in_file))
     initial_len = len(ranges)
     ranges = prepare_ranges(ranges)
     vpprint(ranges)
@@ -77,7 +81,7 @@ def solve(in_file: Path):
     return result_1, result_2
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # python {{nn}}.py in/{{nn}}/...
     in_file = Path(sys.argv[1])
     part_1, part_2 = solve(in_file)

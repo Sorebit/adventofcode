@@ -1,6 +1,6 @@
-from pathlib import Path
 import shutil
 import sys
+from pathlib import Path
 
 
 def touch_inputs(in_dir: Path, inputs: list[str]):
@@ -36,6 +36,7 @@ def scaffold_day(num):
 
     touch_inputs(in_dir, ["input", "test_example"])
 
+
 def usage():
     print(f"Usage: {sys.argv[0]} [arg]")
     print("Arguments")
@@ -45,6 +46,6 @@ def usage():
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        usage()        
+        usage()
     num = sys.argv[1]
     scaffold_day(num)

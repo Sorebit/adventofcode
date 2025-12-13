@@ -1,15 +1,18 @@
 """Advent-of-Code-specific helpers"""
-from dataclasses import dataclass
+
 import heapq
-from os import getenv
-from pathlib import Path
 import math
 import re
+from dataclasses import dataclass
+from os import getenv
+from pathlib import Path
 from pprint import pprint
 from typing import Any, Literal
+
 # Logging
 
-VERBOSE = getenv('VERBOSE')
+VERBOSE = getenv("VERBOSE")
+
 
 def vprint(
     *values: object,
@@ -21,15 +24,18 @@ def vprint(
     if VERBOSE:
         print(*values, sep=sep, end=end, file=file, flush=flush)
 
+
 def vpprint(*args, **kwargs):
     if VERBOSE:
         pprint(*args, *kwargs)
 
+
 # Input parsing helpers
+
 
 def positive_g(s: str):
     """Like find_all_positive but a generator"""
-    for m in re.finditer(r'\d+', s):
+    for m in re.finditer(r"\d+", s):
         yield int(m.group())
 
 
@@ -43,7 +49,7 @@ def find_all_positive(s: str):
 
 def ints_g(s: str):
     """Like find_all_ints but a generator"""
-    for m in re.finditer(r'-?\d+', s):
+    for m in re.finditer(r"-?\d+", s):
         yield int(m.group())
 
 
@@ -52,9 +58,9 @@ def find_all_ints(s: str) -> list[int]:
     return list(ints_g(s))
 
 
-def lines(p: Path, strip: bool = True):
+def read_lines(p: Path, strip: bool = True):
     """Yields lines from file :param p: for processing them with or without storage. Opt-out withespace strip"""
-    with open(p, 'r') as file:
+    with open(p, "r") as file:
         for line in file.readlines():
             if strip:
                 yield line.strip()
@@ -63,6 +69,7 @@ def lines(p: Path, strip: bool = True):
 
 
 # Func. helpers
+
 
 def lmap(func, *iterables):
     return list(map(func, *iterables))
@@ -76,14 +83,18 @@ def first(sequence):
     """next(sequence?)"""
     return sequence[0]
 
+
 def second(sequence):
     """next(sequence?)"""
     return sequence[1]
 
+
 # Structures
+
 
 class TopN:
     """A structure that keeps track of only the top N biggest items"""
+
     def __init__(self, cap: int):
         self._cap = cap
         self._stack = []
@@ -95,7 +106,7 @@ class TopN:
         if len(self._stack) > self._cap:
             # Keep only N biggest values
             print("-", self._stack[0])
-            self._stack = self._stack[-self._cap:]
+            self._stack = self._stack[-self._cap :]
 
     def __len__(self):
         return len(self._stack)
@@ -132,24 +143,24 @@ class V:
     y: int
 
     def __add__(self, other):
-        return V(x=self.x+other.x, y=self.y+other.y)
+        return V(x=self.x + other.x, y=self.y + other.y)
 
     def __sub__(self, other):
-        return V(x=self.x-other.x, y=self.y-other.y)
+        return V(x=self.x - other.x, y=self.y - other.y)
 
     @classmethod
     def from_direction(cls, direction):
         """Up, down, left, or right unit vector."""
         choices = {
-            'U': V(x=0, y=1),
-            'D': V(x=0, y=-1),
-            'L': V(x=-1, y=0),
-            'R': V(x=1, y=0),
+            "U": V(x=0, y=1),
+            "D": V(x=0, y=-1),
+            "L": V(x=-1, y=0),
+            "R": V(x=1, y=0),
         }
         return choices[direction]
 
     def __repr__(self) -> str:
-        return f'V({self.x}, {self.y})'
+        return f"V({self.x}, {self.y})"
 
     def chebyshev_unit(self):
         """A 2D vector of length=1 in Chebyshev metric.
@@ -211,7 +222,7 @@ def vec_sum(a, b):
 class PQFrontier:
     def __init__(self, initial=None):
         """
-            initial - Optional list of (priority, item) tuples
+        initial - Optional list of (priority, item) tuples
         """
         self.frontier = initial or []
         heapq.heapify(self.frontier)
