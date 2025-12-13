@@ -1,35 +1,12 @@
 import dataclasses
 import itertools
 import sys
-import math
 from collections import defaultdict
 from pathlib import Path
+from pprint import pprint
 from typing import Any, Iterable
 
-from aoc import lmap, read_lines, vpprint, vprint, find_all_ints
-
-from pprint import pprint
-
-
-@dataclasses.dataclass
-class V3:
-    x: int
-    y: int
-    z: int
-
-    def __sub__(self, other: "V3") -> "V3":
-        return V3(
-            x=self.x - other.x,
-            y=self.y - other.y,
-            z=self.z - other.z,
-        )
-    
-    def vlen(self):
-        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
-    
-    def __repr__(self):
-        return f"{self.x},{self.y},{self.z}"
-
+from aoc import V3, find_all_ints, lmap, read_lines, vpprint, vprint
 
 points: list[V3] = []
 Edge = tuple[int, int, float]
@@ -38,15 +15,15 @@ by_distance = lambda d: d[2]
 
 edges: list[Edge] = []
 
+
 def add_point(pt: V3):
     pt_idx = len(points)
     for other_idx, other in enumerate(points):
         diff = pt - other
         vprint(diff)
-        item = (pt_idx, other_idx, diff.vlen())
+        item = (pt_idx, other_idx, diff.euclidean())
         edges.append(item)
     points.append(pt)
-
 
 
 unions = {}
@@ -142,7 +119,6 @@ def solve(in_file: Path):
     # its either 1 or 2, idc to make it clean
     result_2 = part_two(edges)
 
-    
     return result_1, result_2
 
 

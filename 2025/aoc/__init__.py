@@ -178,6 +178,26 @@ class V:
         return self.y < other.y
 
 
+@dataclass(frozen=True)
+class V3:
+    x: int
+    y: int
+    z: int
+
+    def __sub__(self, other: "V3") -> "V3":
+        return V3(
+            x=self.x - other.x,
+            y=self.y - other.y,
+            z=self.z - other.z,
+        )
+
+    def euclidean(self) -> float:
+        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
+
+    def __repr__(self):
+        return f"{self.x},{self.y},{self.z}"
+
+
 def manhattan(a: V, b: V) -> int:
     return abs(a.x - b.x) + abs(a.y - b.y)
 
